@@ -16,12 +16,12 @@ services:
     environment:
       SWARM_TASK_ID: '{{.Task.Slot}}'
   kafka-manager:
-    image: qnib/plain-kafka-manager@sha256:045d0d5cbbbc1937baf4cb0a269b193117b193b3cd71c88abab5a579f6b1308f
+    image: qnib/plain-kafka-manager:1.3.3.13@sha256:aa7ebe4bfef8bc11bef9e7b3836ad6cb812051e1240a37d53dc41561f93454ea
     ports:
       - "9001:9000"
     environment:
       ZK_SERVER: "tasks.zookeeper:2181"
   engine:
-    image: qnib/plain-ksql:dirty
+    image: qnib/plain-ksql
     environment:
       KAFKA_BROKERS: "tasks.zookeeper:2181"

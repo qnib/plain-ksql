@@ -27,13 +27,12 @@ ENV KAFKA_BROKERS=tasks.brokers:9092 \
     ENTRYPOINTS_DIR=/opt/qnib/entry
 
 COPY --from=build /opt/ksql/bin/* /usr/bin/
-COPY --from=build /opt/ksql/ksql-cli/target/ksql-cli-${KSQL_BASE_VER}-SNAPSHOT.jar \
-    /opt/ksql/ksql-cli/target/ksql-cli-${KSQL_BASE_VER}-SNAPSHOT-standalone.jar \
+COPY --from=build /opt/ksql/ksql-cli/target/ksql-cli-*-SNAPSHOT.jar \
+    /opt/ksql/ksql-cli/target/ksql-cli-*-SNAPSHOT-standalone.jar \
     /usr/share/java/ksql-cli/
-COPY --from=build /opt/ksql/ksql-rest-app/target/ksql-rest-app-${KSQL_BASE_VER}-SNAPSHOT-standalone.jar \
-    /opt/ksql/ksql-rest-app/target/ksql-rest-app-${KSQL_BASE_VER}-SNAPSHOT.jar \
+COPY --from=build /opt/ksql/ksql-rest-app/target/ksql-rest-app-*.jar \
     /usr/share/java/ksql-rest-app/
-COPY --from=build /opt/ksql/ksql-core/target/ksql-core-${KSQL_BASE_VER}-SNAPSHOT.jar \
+COPY --from=build /opt/ksql/ksql-core/target/ksql-core-*-SNAPSHOT.jar \
      /usr/share/java/ksql-core/
 COPY opt/qnib/entry/21-ksqlserver-properties.sh /opt/qnib/entry/
 COPY opt/qnib/ksql/server.properties /opt/qnib/ksql/
