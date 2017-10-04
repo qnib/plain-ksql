@@ -25,16 +25,16 @@ FROM qnib/alplain-openjre8
 ENV KAFKA_BROKERS=tasks.brokers:9092 \
     KSQL_APP_ID=ksql_test \
     ENTRYPOINTS_DIR=/opt/qnib/entry
-
-COPY --from=build /opt/ksql/bin/* /usr/bin/
-COPY --from=build /opt/ksql/ksql-cli/target/ksql-cli-*-SNAPSHOT.jar \
-    /opt/ksql/ksql-cli/target/ksql-cli-*-SNAPSHOT-standalone.jar \
-    /usr/share/java/ksql-cli/
-COPY --from=build /opt/ksql/ksql-rest-app/target/ksql-rest-app-*.jar \
-    /usr/share/java/ksql-rest-app/
-COPY --from=build /opt/ksql/ksql-core/target/ksql-core-*-SNAPSHOT.jar \
-     /usr/share/java/ksql-core/
 COPY opt/qnib/entry/21-ksqlserver-properties.sh /opt/qnib/entry/
 COPY opt/qnib/ksql/server.properties /opt/qnib/ksql/
+COPY --from=build /opt/ksql /opt/ksql/
+#COPY --from=build /opt/ksql/bin/* /usr/bin/
+#COPY --from=build /opt/ksql/ksql-cli/target/ksql-cli-*-SNAPSHOT.jar \
+#    /opt/ksql/ksql-cli/target/ksql-cli-*-SNAPSHOT-standalone.jar \
+#    /usr/share/java/ksql-cli/
+#COPY --from=build /opt/ksql/ksql-rest-app/target/ksql-rest-app-*.jar \
+#    /usr/share/java/ksql-rest-app/
+#COPY --from=build /opt/ksql/ksql-core/target/ksql-core-*-SNAPSHOT.jar \
+#     /usr/share/java/ksql-core/
 
-CMD ["ksql-server-start", "/etc/ksql/server.properties"]
+CMD ["/opt/ksql/bin/ksql-server-start", "/etc/ksql/server.properties"]
