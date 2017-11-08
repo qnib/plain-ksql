@@ -22,6 +22,6 @@ services:
     environment:
       ZOOKEEPER_HOSTS: "tasks.zookeeper:2181"
   engine:
-    image: qnib/plain-ksql:0.1-pre10
+    image: qnib/plain-ksql:0.1-pre10@sha256:db3942ecdb50dabd29347f7731ee054fa065acc3cd8e50e974ca36deae779432
     environment:
       KAFKA_BROKERS: "tasks.broker:9092"
