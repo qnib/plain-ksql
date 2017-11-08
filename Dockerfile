@@ -2,19 +2,17 @@ FROM qnib/alpn-maven@sha256:f00ffb6462513fcd2fd0885efc8f6c0220bce5280cd4faa3301b
 
 ARG KSQL_SUB_VER=-pre10
 ARG KSQL_BASE_VER=0.1
-ARG CONFLUENT_VERSION=v3.3.0
+ARG CONFLUENT_VERSION=v3.3.x
+ARG CONFLUENT_COMMON_VER=3.3.x
 
 RUN apk --no-cache add git \
  && mkdir -p /usr/src/ \
  && cd /usr/src/ \
- && git clone --branch ${CONFLUENT_VERSION} https://github.com/confluentinc/common \
+ && git clone --branch ${CONFLUENT_COMMON_VER} https://github.com/confluentinc/common \
  && cd common \
  && mvn -Dmaven.test.skip=true clean install
-RUN wget -qO - https://github.com/confluentinc/ksql/archive/${KSQL_BASE_VER}${KSQL_SUB_VER}.tar.gz |tar xfz - -C /opt/ \
- && mv /opt/ksql-${KSQL_BASE_VER}${KSQL_SUB_VER} /opt/ksql \
+RUN git clone https://github.com/confluentinc/ksql /opt/ksql \
  && cd /opt/ksql/build-tools \
- && mvn -DskipTests --quiet clean package install \
- && cd /opt/ksql/ksql-core \
  && mvn -DskipTests --quiet clean package install \
  && cd /opt/ksql \
  && mvn -DskipTests --quiet clean package install
