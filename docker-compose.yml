@@ -9,12 +9,15 @@ services:
     ports:
       - "9090:9090"
   broker:
-    image: qnib/plain-kafka:1.0.0-1@sha256:32cbccc9e88fbf1a4666f25d6b375a87b0b61000a144e75daa05c8585fd7f8db
+    image: qnib/plain-kafka:1.0.0-1@sha256:c705a48932ac1f90e95afa0d6f4ab8ff68d8cd9fcec8bc4d0fa6b25747622dda
     hostname: "{{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}"
     ports:
       - "9092:9092"
+    deploy:
+      replicas: 1
     environment:
-      KAFKA_BROKER_ID: '{{.Task.Slot}}'
+      - KAFKA_BROKER_ID={{.Task.Slot}}
+      - LOG_MESSAGE_FORMAT_VERSION=1.0-IV0
   manager:
     image: qnib/plain-kafka-manager:1.3.3.14@sha256:1582cfe5ecb60a52f3ebc137cabde628923f50b8bae22e8edd7121fc72ea740a
     ports:
