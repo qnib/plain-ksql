@@ -1,24 +1,22 @@
-FROM qnib/alpn-maven@sha256:f00ffb6462513fcd2fd0885efc8f6c0220bce5280cd4faa3301b9a5c297f6a3a AS build
+FROM qnib/uplain-maven AS build
 
-ARG KSQL_SUB_VER=-pre10
-ARG KSQL_BASE_VER=0.1
-ARG CONFLUENT_VERSION=v3.3.x
-ARG CONFLUENT_COMMON_VER=3.3.x
+ARG CONFLUENT_VERSION=v4.1.1-rc3
+ARG CONFLUENT_COMMON_VER=v4.1.1-rc3
 
-RUN apk --no-cache add git \
+RUN apt-get install -y git \
  && mkdir -p /usr/src/ \
  && cd /usr/src/ \
- && git clone --branch ${CONFLUENT_COMMON_VER} https://github.com/confluentinc/common \
- && cd common \
- && mvn -Dmaven.test.skip=true clean install
-RUN git clone https://github.com/confluentinc/ksql /opt/ksql \
- && cd /opt/ksql/build-tools \
- && mvn -DskipTests --quiet clean package install \
- && cd /opt/ksql \
- && mvn -DskipTests --quiet clean package install
+ && git clone --branch ${CONFLUENT_COMMON_VER} https://github.com/confluentinc/common
+RUN cd /usr/src/common \
+ && mvn -Dmaven.test.skip=true -DskipTests clean install
+RUN git clone https://github.com/confluentinc/ksql /opt/ksql
+RUN cd /opt/ksql/build-tools \
+ && mvn -DskipTests -Dmaven.test.skip=true --quiet clean package install
+ RUN cd /opt/ksql/ \
+ && mvn -DskipTests -Dmaven.test.skip=true --quiet clean package install
 
 
-FROM qnib/alplain-openjre8
+FROM qnib/uplain-openjre8
 
 ENV KAFKA_BROKERS=tasks.brokers:9092 \
     KSQL_APP_ID=ksql_test \
