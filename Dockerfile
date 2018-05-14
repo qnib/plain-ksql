@@ -1,15 +1,15 @@
 FROM qnib/uplain-maven AS build
 
-ARG CONFLUENT_VERSION=v4.1.1-rc3
-ARG CONFLUENT_COMMON_VER=v4.1.1-rc3
+ARG KSQL_BRANCH=v4.1.0
+ARG COMMON_BRANCH=v4.1.0
 
 RUN apt-get install -y git \
  && mkdir -p /usr/src/ \
  && cd /usr/src/ \
- && git clone --branch ${CONFLUENT_COMMON_VER} https://github.com/confluentinc/common
+ && git clone --branch ${COMMON_BRANCH} https://github.com/confluentinc/common
 RUN cd /usr/src/common \
  && mvn -Dmaven.test.skip=true -DskipTests clean install
-RUN git clone https://github.com/confluentinc/ksql /opt/ksql
+RUN git clone --branch ${KSQL_BRANCH} https://github.com/confluentinc/ksql /opt/ksql
 RUN cd /opt/ksql/build-tools \
  && mvn -DskipTests -Dmaven.test.skip=true --quiet clean package install
  RUN cd /opt/ksql/ \
